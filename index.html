@@ -1,14 +1,327 @@
-<!doctype html>
+<!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="utf-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>Professional website</title>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Huy Le — Portfolio</title>
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    html { scroll-behavior: smooth; }
+    body { font-family: 'Segoe UI', Arial, sans-serif; color: #333; background: #f5f7fa; line-height: 1.6; }
+
+    /* Nav */
+    nav {
+      position: sticky; top: 0; z-index: 100;
+      background: #1a3a5c; padding: 0 2rem;
+      display: flex; align-items: center; justify-content: space-between;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.2); flex-wrap: wrap; gap: 0.5rem;
+    }
+    .nav-logo { color: #fff; font-weight: 700; font-size: 1.1rem; padding: 1rem 0; }
+    nav ul { list-style: none; display: flex; gap: 1.25rem; flex-wrap: wrap; padding: 0.5rem 0; }
+    nav ul a { color: #c8d8e8; text-decoration: none; font-size: 0.88rem; padding: 0.5rem 0; display: block; transition: color 0.2s; }
+    nav ul a:hover { color: #fff; }
+
+    /* Hero */
+    #hero {
+      background: linear-gradient(135deg, #1a3a5c 0%, #2e7dd4 100%);
+      color: #fff; text-align: center; padding: 5rem 2rem 4rem;
+    }
+    #hero img {
+      width: 190px; height: 190px; border-radius: 50%; object-fit: cover; object-position: center top;
+      border: 4px solid #fff; box-shadow: 0 4px 24px rgba(0,0,0,0.3); margin-bottom: 1.5rem;
+      display: block; margin-left: auto; margin-right: auto;
+    }
+    #hero h1 { font-size: 2.4rem; font-weight: 700; margin-bottom: 0.4rem; }
+    #hero .subtitle { font-size: 1.05rem; color: #c8d8e8; margin-bottom: 1.25rem; }
+    #hero .bio-placeholder {
+      display: inline-block; background: rgba(255,255,255,0.1);
+      border: 1px dashed rgba(255,255,255,0.5); border-radius: 6px;
+      padding: 0.75rem 1.5rem; color: #c8d8e8; font-style: italic; font-size: 0.95rem;
+    }
+
+    /* Section wrapper */
+    .section-inner { max-width: 900px; margin: 0 auto; padding: 4rem 2rem; }
+    .section-inner + .section-inner { border-top: 1px solid #dde4ee; }
+    h2 {
+      font-size: 1.55rem; color: #1a3a5c; margin-bottom: 1.75rem;
+      padding-bottom: 0.45rem; border-bottom: 3px solid #2e7dd4; display: inline-block;
+    }
+
+    /* Education */
+    .edu-card {
+      background: #fff; border-radius: 10px; padding: 1.75rem 2rem;
+      box-shadow: 0 2px 12px rgba(0,0,0,0.07);
+    }
+    .edu-card h3 { color: #1a3a5c; font-size: 1.1rem; margin-bottom: 0.2rem; }
+    .edu-card .degree { font-size: 1rem; color: #2e7dd4; margin-bottom: 0.2rem; }
+    .edu-card .meta { font-size: 0.83rem; color: #777; margin-bottom: 0.75rem; }
+    .edu-card .gpa { font-weight: 600; color: #1a3a5c; margin-bottom: 0.75rem; }
+    .coursework { font-size: 0.88rem; color: #555; }
+    .coursework strong { color: #333; }
+
+    /* Experience Timeline */
+    .timeline { position: relative; padding-left: 2rem; }
+    .timeline::before {
+      content: ''; position: absolute; left: 6px; top: 4px; bottom: 4px;
+      width: 2px; background: #c8d8e8;
+    }
+    .timeline-item { position: relative; margin-bottom: 2.5rem; }
+    .timeline-item:last-child { margin-bottom: 0; }
+    .timeline-dot {
+      position: absolute; left: -1.75rem; top: 6px;
+      width: 13px; height: 13px; border-radius: 50%;
+      background: #2e7dd4; border: 2px solid #f5f7fa;
+      box-shadow: 0 0 0 2px #2e7dd4;
+    }
+    .timeline-item .org { font-weight: 700; color: #1a3a5c; font-size: 1rem; }
+    .timeline-item .role { color: #2e7dd4; font-size: 0.93rem; font-style: italic; margin-bottom: 0.15rem; }
+    .timeline-item .period { font-size: 0.8rem; color: #888; margin-bottom: 0.6rem; }
+    .timeline-item ul { padding-left: 1.2rem; font-size: 0.88rem; color: #444; }
+    .timeline-item ul li { margin-bottom: 0.3rem; }
+
+    /* Projects */
+    .projects-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(250px, 1fr)); gap: 1.5rem; }
+    .project-card {
+      background: #fff; border-radius: 10px; padding: 1.5rem;
+      box-shadow: 0 2px 12px rgba(0,0,0,0.07); border-top: 3px solid #2e7dd4;
+    }
+    .project-card h3 { font-size: 0.93rem; color: #1a3a5c; margin-bottom: 0.5rem; line-height: 1.4; }
+    .project-card p { font-size: 0.86rem; color: #555; line-height: 1.5; }
+    .tag {
+      display: inline-block; background: #e8f0fb; color: #2e7dd4;
+      border-radius: 20px; padding: 0.18rem 0.7rem; font-size: 0.74rem;
+      font-weight: 600; margin-bottom: 0.65rem; letter-spacing: 0.02em;
+    }
+
+    /* Skills */
+    .skills-grid { display: flex; flex-wrap: wrap; gap: 0.65rem; }
+    .skill-pill {
+      background: #fff; border: 1.5px solid #2e7dd4; color: #1a3a5c;
+      border-radius: 25px; padding: 0.38rem 1rem; font-size: 0.86rem; font-weight: 500;
+    }
+
+    /* Affiliations */
+    .affil-list { list-style: none; margin-top: 2rem; }
+    .affil-list li {
+      background: #fff; border-radius: 8px; padding: 0.75rem 1.1rem;
+      margin-bottom: 0.65rem; box-shadow: 0 1px 6px rgba(0,0,0,0.06);
+      display: flex; justify-content: space-between; align-items: center;
+      font-size: 0.88rem; gap: 1rem;
+    }
+    .affil-list .date { color: #888; font-size: 0.8rem; white-space: nowrap; }
+
+    /* Contact */
+    #contact-section { text-align: center; }
+    #contact-section p { color: #555; margin-bottom: 1.5rem; }
+    .btn {
+      display: inline-block; background: #2e7dd4; color: #fff;
+      text-decoration: none; padding: 0.75rem 2.25rem; border-radius: 30px;
+      font-weight: 600; font-size: 0.95rem; transition: background 0.2s, transform 0.15s;
+    }
+    .btn:hover { background: #1a3a5c; transform: translateY(-1px); }
+
+    /* Footer */
+    footer { text-align: center; padding: 1.75rem 2rem; font-size: 0.8rem; background: #1a3a5c; color: #c8d8e8; }
+
+    /* Mobile */
+    @media (max-width: 600px) {
+      #hero h1 { font-size: 1.8rem; }
+      #hero img { width: 150px; height: 150px; }
+      .section-inner { padding: 3rem 1.25rem; }
+      nav ul { gap: 0.6rem; }
+      .affil-list li { flex-direction: column; align-items: flex-start; gap: 0.25rem; }
+    }
+  </style>
 </head>
 <body>
-  <main>
-    <h1>Your professional website is coming soon</h1>
-    <p>This page is the starting point for my people analytics project.</p>
-  </main>
+
+<!-- Navigation -->
+<nav>
+  <span class="nav-logo">Huy Le</span>
+  <ul>
+    <li><a href="#education">Education</a></li>
+    <li><a href="#experience">Experience</a></li>
+    <li><a href="#projects">Projects</a></li>
+    <li><a href="#skills">Skills</a></li>
+    <li><a href="#contact">Contact</a></li>
+  </ul>
+</nav>
+
+<!-- Hero: Photo & Name -->
+<section id="hero">
+  <img src="Huy_Le Photo.jpg" alt="Professional headshot of Huy Le in a white dress shirt and plaid tie against a blue background">
+  <h1>Huy Le</h1>
+  <p class="subtitle">Accounting Student &amp; Aspiring CPA &nbsp;|&nbsp; California State University, Bakersfield</p>
+  <span class="bio-placeholder">Short bio — Needs your input</span>
+</section>
+
+<!-- Education -->
+<div id="education">
+  <div class="section-inner">
+    <h2>Education</h2>
+    <div class="edu-card">
+      <h3>California State University, Bakersfield</h3>
+      <p class="degree">Bachelor of Science, Business Administration &mdash; Accounting Concentration</p>
+      <p class="meta">Bakersfield, CA &nbsp;&bull;&nbsp; January 2023 &ndash; Present</p>
+      <p class="gpa">GPA: 3.80 &nbsp;&middot;&nbsp; Dean&rsquo;s List: Spring 2023 &ndash; Spring 2026</p>
+      <p class="coursework">
+        <strong>Relevant Coursework:</strong> Managerial Accounting and Decision Making &middot;
+        Financial Accounting &middot; Intermediate Accounting I &amp; II &middot;
+        Advanced Accounting &middot; Fundamentals of Tax-Individuals
+      </p>
+    </div>
+  </div>
+</div>
+
+<!-- Experience -->
+<div id="experience">
+  <div class="section-inner">
+    <h2>Experience</h2>
+    <div class="timeline">
+
+      <div class="timeline-item">
+        <div class="timeline-dot"></div>
+        <p class="org">Clinica Sierra Vista &mdash; Billing Office Department</p>
+        <p class="role">Billing Intern, Follow-up and Payment-Posting Rotation</p>
+        <p class="period">June 2025 &ndash; March 2026 &nbsp;&bull;&nbsp; Bakersfield, CA</p>
+        <ul>
+          <li>Resolved 40&ndash;50 complex billing disputes per 4-hour shift through cross-functional collaboration.</li>
+          <li>Submitted billing data for Medi-Cal, Medicare, and commercial insurances to ensure proper claim submission.</li>
+          <li>Reconciled the accounts receivable ledger by identifying outstanding claims and ensuring timely follow-up.</li>
+          <li>Resolved billing discrepancies and denials by researching errors, coordinating with billing trainers, and submitting corrections and appeals.</li>
+          <li>Managed payment posting by verifying correct payers and matching payments to appropriate invoices.</li>
+          <li>Handled phone communications with providers, patients, and insurance claim staff to resolve billing statement issues and clarify Explanation of Benefits.</li>
+        </ul>
+      </div>
+
+      <div class="timeline-item">
+        <div class="timeline-dot"></div>
+        <p class="org">Associated Student, Incorporated (ASI)</p>
+        <p class="role">Director of Business and Public Administration</p>
+        <p class="period">May 2025 &ndash; May 2026 &nbsp;&bull;&nbsp; Bakersfield, CA</p>
+        <ul>
+          <li>Represented all Business and Public Administration students, addressing and resolving concerns with campus leadership and the BPA Dean.</li>
+          <li>Managed and allocated $30,000 toward student organizations through the ASI Finance Committee review process.</li>
+          <li>Organized activities for BPA students in collaboration with Presidents of business clubs and organizations.</li>
+        </ul>
+      </div>
+
+      <div class="timeline-item">
+        <div class="timeline-dot"></div>
+        <p class="org">Volunteer Income Tax Assistance (VITA)</p>
+        <p class="role">Greeter / Interpreter and Tax Preparer</p>
+        <p class="period">February 2025 &ndash; March 2025 &nbsp;&bull;&nbsp; Bakersfield, CA</p>
+        <ul>
+          <li>Certified by the IRS as an Advanced Tax Preparer; prepared and filed accurate tax returns for eligible taxpayers.</li>
+          <li>Provided bilingual (English/Vietnamese) interpretation services for non-English-speaking clients.</li>
+          <li>Screened taxpayers to determine eligibility and ensure all required documentation was in order.</li>
+          <li>Completed tax law training and electronic filing software certification.</li>
+        </ul>
+      </div>
+
+      <div class="timeline-item">
+        <div class="timeline-dot"></div>
+        <p class="org">California State University, Bakersfield &mdash; Student Union Department</p>
+        <p class="role">Student Information Specialist and Facilities Assistant Staff</p>
+        <p class="period">October 2023 &ndash; Present &nbsp;&bull;&nbsp; Bakersfield, CA</p>
+        <ul>
+          <li>Developed strong customer service skills through direct student support and facilities assistance.</li>
+          <li>Analyzed complex reservation requests and developed effective solutions for university conferences and events.</li>
+          <li>Maintained relationships with campus departments to identify and address student information needs.</li>
+          <li>Managed and updated campus event calendars to ensure timely and accurate dissemination of information.</li>
+        </ul>
+      </div>
+
+      <div class="timeline-item">
+        <div class="timeline-dot"></div>
+        <p class="org">NHK Printing and Packaging Joint Stock Company</p>
+        <p class="role">Apprenticeship Employee in Marketing</p>
+        <p class="period">June 2023 &ndash; July 2023 &nbsp;&bull;&nbsp; Ho Chi Minh City, Vietnam</p>
+        <ul>
+          <li>Provided administrative support to the marketing team, managing files and organizing project materials.</li>
+          <li>Managed social media presence including Facebook development and community engagement.</li>
+          <li>Digitized inventory records to improve data accessibility and accuracy through Excel data input.</li>
+        </ul>
+      </div>
+
+    </div>
+  </div>
+</div>
+
+<!-- Projects & Research -->
+<div id="projects">
+  <div class="section-inner">
+    <h2>Projects &amp; Research</h2>
+    <div class="projects-grid">
+
+      <div class="project-card">
+        <span class="tag">Research</span>
+        <h3>How Gamification and Office Decoration Effect Can Create Impacts on Workplace Performance</h3>
+        <p>Academic research exploring the relationship between workplace environment design, gamification strategies, and employee productivity outcomes.</p>
+      </div>
+
+      <div class="project-card">
+        <span class="tag">Web Project</span>
+        <h3>Personal Portfolio Website</h3>
+        <p>A personal portfolio site built to showcase professional background, experience, and skills to prospective employers.</p>
+      </div>
+
+      <div class="project-card">
+        <span class="tag">Web Project</span>
+        <h3>Resume Website</h3>
+        <p>An interactive web-based resume presenting professional experience and qualifications in a digital format.</p>
+      </div>
+
+      <div class="project-card">
+        <span class="tag">Web Project</span>
+        <h3>Accounting Resource Website</h3>
+        <p>An informational website covering accounting concepts, tools, and resources for students and general audiences.</p>
+      </div>
+
+    </div>
+  </div>
+</div>
+
+<!-- Skills -->
+<div id="skills">
+  <div class="section-inner">
+    <h2>Skills</h2>
+    <div class="skills-grid">
+      <span class="skill-pill">Microsoft Office</span>
+      <span class="skill-pill">Excel</span>
+      <span class="skill-pill">EPIC (EHR System)</span>
+      <span class="skill-pill">Electronic Tax Filing Software</span>
+      <span class="skill-pill">Medical Billing &mdash; Medi-Cal &amp; Medicare</span>
+      <span class="skill-pill">Accounts Receivable Reconciliation</span>
+      <span class="skill-pill">IRS Advanced Tax Preparer (Certified)</span>
+      <span class="skill-pill">Bilingual: English &amp; Vietnamese</span>
+      <span class="skill-pill">Customer Service</span>
+      <span class="skill-pill">Team Collaboration</span>
+      <span class="skill-pill">Rapid Skill Acquisition</span>
+    </div>
+
+    <h2 style="margin-top: 2.5rem;">Affiliations &amp; Recognitions</h2>
+    <ul class="affil-list">
+      <li><span>University Accounting Association, Member</span><span class="date">Jan 2024 &ndash; Present</span></li>
+      <li><span>CalCPA, Member</span><span class="date">Sep 2024 &ndash; Present</span></li>
+      <li><span>Global Bridge Organization, Committee Chair</span><span class="date">Oct 2024 &ndash; Present</span></li>
+      <li><span>CalCPA Scholarship Awardee &mdash; $2,000</span><span class="date">Feb 2026</span></li>
+    </ul>
+  </div>
+</div>
+
+<!-- Contact -->
+<div id="contact">
+  <div class="section-inner" id="contact-section">
+    <h2>Contact</h2>
+    <p>Connect with me on LinkedIn to discuss opportunities or collaborations.</p>
+    <a class="btn" href="https://www.linkedin.com/in/huy-le-770860288/" target="_blank" rel="noopener noreferrer">View LinkedIn Profile</a>
+  </div>
+</div>
+
+<footer>
+  <p>&copy; 2026 Huy Le. All rights reserved.</p>
+</footer>
+
 </body>
 </html>
