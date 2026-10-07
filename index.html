@@ -131,6 +131,28 @@
     .contact-email a { color: #1a3a5c; text-decoration: none; }
     .contact-email a:hover { color: #2e7dd4; text-decoration: underline; }
 
+    /* Hero call to action */
+    .hero-cta { margin-top: 1.75rem; }
+    .btn-light { background: #fff; color: #1a3a5c; }
+    .btn-light:hover { background: #e8f0fb; color: #1a3a5c; }
+
+    /* Resume & Transcript downloads */
+    .doc-intro { color: #555; margin: -0.75rem 0 1.5rem; }
+    .docs-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 1.5rem; }
+    .doc-card {
+      background: #fff; border-radius: 10px; padding: 1.5rem; display: flex; gap: 1.1rem; align-items: flex-start;
+      box-shadow: 0 2px 12px rgba(0,0,0,0.07); border-top: 3px solid #2e7dd4;
+    }
+    .doc-icon {
+      flex: none; width: 46px; height: 56px; border-radius: 6px; background: #e8f0fb; color: #2e7dd4;
+      display: grid; place-items: center; font-weight: 700; font-size: 0.75rem; letter-spacing: 0.05em;
+    }
+    .doc-card h3 { font-size: 1rem; color: #1a3a5c; margin-bottom: 0.2rem; line-height: 1.35; }
+    .doc-meta { font-size: 0.82rem; color: #777; margin-bottom: 0.9rem; }
+    .doc-note { font-size: 0.8rem; color: #666; margin: -0.5rem 0 0.9rem; }
+    .doc-actions { display: flex; gap: 0.6rem; flex-wrap: wrap; }
+    .btn-sm { padding: 0.45rem 1.35rem; font-size: 0.86rem; }
+
     /* Footer */
     footer { text-align: center; padding: 1.75rem 2rem; font-size: 0.8rem; background: #1a3a5c; color: #c8d8e8; }
 
@@ -154,6 +176,7 @@
     <li><a href="#experience">Experience</a></li>
     <li><a href="#projects">Projects</a></li>
     <li><a href="#skills">Skills</a></li>
+    <li><a href="#documents">Resume</a></li>
     <li><a href="#contact">Contact</a></li>
   </ul>
 </nav>
@@ -166,6 +189,7 @@
   <p class="bio">
     I am an accounting student at California State University, Bakersfield, maintaining a 3.80 GPA and Dean&rsquo;s List recognition every semester since Spring 2023. I currently work as an Accounting Student Assistant in the CSUB Information Technology Services business office and serve as Treasurer of the Student Research Scholar Club. My experience also spans medical billing at Clinica Sierra Vista, IRS-certified tax preparation through VITA, and student government leadership as ASI Director of Business and Public Administration &mdash; where I managed a $30,000 budget for student organizations. Bilingual in English and Vietnamese, I bring strong analytical skills and a commitment to accuracy to every role I take on. I am actively working toward CPA licensure and eager to contribute in a professional accounting environment.
   </p>
+  <a class="btn btn-light hero-cta" href="#documents">Resume &amp; Transcript</a>
 </section>
 
 <!-- Education -->
@@ -348,6 +372,42 @@
       <li><span>CalCPA, Student Member</span><span class="date">Sep 2024 &ndash; Present</span></li>
       <li><span>CalCPA Scholarship Awardee &mdash; $2,000</span><span class="date">Feb 2026</span></li>
     </ul>
+  </div>
+</div>
+
+<!-- Resume & Transcript downloads (files live in /files; replace a PDF with the same name to update it) -->
+<div id="documents">
+  <div class="section-inner">
+    <h2>Resume &amp; Transcript</h2>
+    <p class="doc-intro">View or download my current resume and unofficial transcript.</p>
+    <div class="docs-grid">
+
+      <div class="doc-card">
+        <div class="doc-icon">PDF</div>
+        <div>
+          <h3>Resume &mdash; Fall 2026</h3>
+          <p class="doc-meta">PDF &middot; 3 pages &middot; Updated September 2026</p>
+          <div class="doc-actions">
+            <a class="btn btn-sm" href="files/Huy-Le-Resume.pdf" target="_blank" rel="noopener">View</a>
+            <a class="btn btn-sm btn-outline" href="files/Huy-Le-Resume.pdf" download="Huy Le - Resume (Fall 2026).pdf">Download</a>
+          </div>
+        </div>
+      </div>
+
+      <div class="doc-card">
+        <div class="doc-icon">PDF</div>
+        <div>
+          <h3>Unofficial Transcript &mdash; CSU Bakersfield</h3>
+          <p class="doc-meta">PDF &middot; 2 pages &middot; Includes Fall 2026 courses in progress</p>
+          <p class="doc-note">Issued under my legal name, Nguyen Le. Student ID and birthdate hidden for privacy. Official transcript available on request.</p>
+          <div class="doc-actions">
+            <a class="btn btn-sm" href="files/Huy-Le-Unofficial-Transcript.pdf" target="_blank" rel="noopener">View</a>
+            <a class="btn btn-sm btn-outline" href="files/Huy-Le-Unofficial-Transcript.pdf" download="Huy Le - Unofficial Transcript.pdf">Download</a>
+          </div>
+        </div>
+      </div>
+
+    </div>
   </div>
 </div>
 
