@@ -15,16 +15,36 @@
     html { scroll-behavior: smooth; }
     body { font-family: 'Segoe UI', Arial, sans-serif; color: #333; background: #f5f7fa; line-height: 1.6; }
 
-    /* Nav */
+    /* Motion: one easing curve and shared timings for every transition and animation */
+    :root {
+      --ease: cubic-bezier(0.25, 0.1, 0.25, 1);
+      --dur: 0.45s;        /* hover lifts, lightbox */
+      --dur-fast: 0.25s;   /* color changes on links and buttons */
+      --dur-slow: 0.8s;    /* scroll reveal and hero entrance */
+      --stagger: 70ms;     /* delay between items revealed together */
+      --shadow-lift: 0 14px 34px rgba(26,58,92,0.14);
+    }
+
+    /* Nav (frosted glass) */
     nav {
       position: sticky; top: 0; z-index: 100;
+      /* Solid navy at the top of the page; turns to frosted glass once the page scrolls (.is-scrolled, set by the script) */
       background: #1a3a5c; padding: 0 2rem;
+      transition: background-color var(--dur) var(--ease);
       display: flex; align-items: center; justify-content: space-between;
       box-shadow: 0 2px 8px rgba(0,0,0,0.2); flex-wrap: wrap; gap: 0.5rem;
     }
+    /* Browsers without frosted glass keep the solid navy bar */
+    @supports (backdrop-filter: blur(1px)) or (-webkit-backdrop-filter: blur(1px)) {
+      nav.is-scrolled {
+        background: rgba(26,58,92,0.86);
+        -webkit-backdrop-filter: saturate(180%) blur(18px); backdrop-filter: saturate(180%) blur(18px);
+      }
+    }
     .nav-logo { color: #fff; font-weight: 700; font-size: 1.1rem; padding: 1rem 0; }
     nav ul { list-style: none; display: flex; gap: 1.25rem; flex-wrap: wrap; padding: 0.5rem 0; }
-    nav ul a { color: #c8d8e8; text-decoration: none; font-size: 0.88rem; padding: 0.5rem 0; display: block; transition: color 0.2s; }
+    /* #dce8f5 keeps links clearly readable on the see-through bar, even over light sections */
+    nav ul a { color: #dce8f5; text-decoration: none; font-size: 0.88rem; padding: 0.5rem 0; display: block; transition: color var(--dur-fast) var(--ease); }
     nav ul a:hover { color: #fff; }
 
     /* Hero */
@@ -64,16 +84,40 @@
     .coursework { font-size: 0.88rem; color: #555; }
     .coursework strong { color: #333; }
 
+    /* Certifications & Honors */
+    .certs-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(min(300px, 100%), 1fr)); gap: 1.5rem; }
+    .cert-card {
+      background: #fff; border-radius: 10px; overflow: hidden; display: flex; flex-direction: column;
+      box-shadow: 0 2px 12px rgba(0,0,0,0.07); border-top: 3px solid #2e7dd4;
+    }
+    .cert-thumb {
+      display: block; overflow: hidden; aspect-ratio: 1600 / 1231; cursor: zoom-in;
+      background: #eef2f7; border-bottom: 1px solid #e6ecf3;
+    }
+    .cert-thumb img { display: block; width: 100%; height: 100%; object-fit: cover; transition: transform var(--dur) var(--ease); }
+    .cert-body { padding: 1.25rem 1.5rem 1.5rem; display: flex; flex-direction: column; flex: 1; }
+    .cert-body .tag { align-self: flex-start; }
+    .cert-body h3 { font-size: 0.98rem; color: #1a3a5c; line-height: 1.4; margin-bottom: 0.3rem; }
+    .cert-issuer { font-size: 0.86rem; color: #2e7dd4; margin-bottom: 0.1rem; }
+    .cert-date { font-size: 0.8rem; color: #888; margin-bottom: 0.65rem; }
+    .cert-desc { font-size: 0.86rem; color: #555; line-height: 1.5; margin-bottom: 1.1rem; }
+    .cert-body .doc-actions { margin-top: auto; }
+
     /* Experience Timeline */
-    .timeline { position: relative; padding-left: 2rem; }
+    .timeline { position: relative; padding-left: 1.75rem; }
     .timeline::before {
-      content: ''; position: absolute; left: 6px; top: 4px; bottom: 4px;
+      content: ''; position: absolute; left: 6px; top: calc(1.1rem + 4px); bottom: calc(1.1rem + 4px);
       width: 2px; background: #c8d8e8;
     }
-    .timeline-item { position: relative; margin-bottom: 2.5rem; }
+    /* Padding and radius are always there, so the white hover card causes no layout shift */
+    .timeline-item {
+      position: relative; margin-bottom: 0.4rem;
+      padding: 1.1rem 1.4rem; border-radius: 10px; background: transparent;
+    }
     .timeline-item:last-child { margin-bottom: 0; }
+    /* Dot centered on the line: line center is 7px from the timeline edge, dot is 13px wide */
     .timeline-dot {
-      position: absolute; left: -1.75rem; top: 6px;
+      position: absolute; left: calc(0.5px - 1.75rem); top: calc(1.1rem + 6px);
       width: 13px; height: 13px; border-radius: 50%;
       background: #2e7dd4; border: 2px solid #f5f7fa;
       box-shadow: 0 0 0 2px #2e7dd4;
@@ -121,7 +165,9 @@
     .btn {
       display: inline-block; background: #2e7dd4; color: #fff;
       text-decoration: none; padding: 0.75rem 2.25rem; border-radius: 30px;
-      font-weight: 600; font-size: 0.95rem; transition: background 0.2s, transform 0.15s;
+      font-weight: 600; font-size: 0.95rem;
+      transition: background-color var(--dur-fast) var(--ease), color var(--dur-fast) var(--ease),
+                  box-shadow var(--dur-fast) var(--ease), transform var(--dur-fast) var(--ease);
     }
     .btn:hover { background: #1a3a5c; transform: translateY(-1px); }
     .btn-row { display: flex; gap: 0.85rem; justify-content: center; flex-wrap: wrap; }
@@ -156,6 +202,63 @@
     /* Footer */
     footer { text-align: center; padding: 1.75rem 2rem; font-size: 0.8rem; background: #1a3a5c; color: #c8d8e8; }
 
+    /* Certificate lightbox (one shared <dialog>, filled in by the script at the bottom) */
+    .lightbox {
+      border: none; padding: 0; margin: auto; background: #fff; color: #333;
+      border-radius: 14px; box-shadow: 0 24px 60px rgba(0,0,0,0.35);
+      width: 94vw; width: min(1100px, 94vw, calc((100vh - 8rem) * 1.3));
+      max-width: 94vw; max-height: calc(100vh - 2rem); overflow: auto;
+    }
+    .lightbox::backdrop {
+      background: rgba(14,32,52,0.72);
+      -webkit-backdrop-filter: blur(6px); backdrop-filter: blur(6px);
+    }
+    .lightbox figure { position: relative; }
+    .lightbox img { display: block; width: 100%; height: auto; }
+    .lightbox figcaption {
+      display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap;
+      gap: 0.75rem 1rem; padding: 0.9rem 1.25rem; border-top: 1px solid #e6ecf3;
+    }
+    .lightbox-title { color: #1a3a5c; font-weight: 600; font-size: 0.95rem; line-height: 1.4; }
+    .lightbox-close {
+      position: absolute; top: 0.65rem; right: 0.65rem; width: 2.4rem; height: 2.4rem; border-radius: 50%;
+      border: none; background: rgba(26,58,92,0.85); color: #fff; font: 400 1.5rem/1 'Segoe UI', Arial, sans-serif;
+      cursor: pointer; box-shadow: 0 4px 12px rgba(0,0,0,0.25); transition: background-color var(--dur-fast) var(--ease);
+    }
+    .lightbox-close:hover { background: #2e7dd4; }
+
+    /* Hover lift: real mouse/trackpad only, so a tap on a phone never leaves a card stuck "up" */
+    .edu-card, .project-card, .doc-card, .cert-card, .affil-list li, .timeline-item, .skill-pill {
+      transition: transform var(--dur) var(--ease), box-shadow var(--dur) var(--ease),
+                  background-color var(--dur) var(--ease), color var(--dur) var(--ease);
+    }
+    @media (hover: hover) and (pointer: fine) {
+      .edu-card:hover, .project-card:hover, .doc-card:hover, .cert-card:hover { transform: translateY(-6px); box-shadow: var(--shadow-lift); }
+      .cert-card:hover .cert-thumb img { transform: scale(1.04); }
+      .affil-list li:hover { transform: translateY(-3px); box-shadow: var(--shadow-lift); }
+      .timeline-item:hover { transform: translateY(-4px); background: #fff; box-shadow: var(--shadow-lift); }
+      .skill-pill:hover { transform: translateY(-2px); background: #2e7dd4; color: #fff; box-shadow: 0 6px 16px rgba(46,125,212,0.25); }
+    }
+
+    /* Entrance motion: hero on load, sections fade up as they scroll in.
+       Hiding happens only under html.js-motion (set by the script in <head>), only on screen,
+       and only if the visitor allows motion. Keep the list in sync with REVEAL in the bottom script. */
+    @keyframes rise { from { opacity: 0; transform: translateY(var(--rise, 28px)); } }
+    @keyframes pop { from { opacity: 0; transform: translateY(12px) scale(0.97); } }
+    @keyframes fade { from { opacity: 0; } }
+    @media screen and (prefers-reduced-motion: no-preference) {
+      #hero > * { --rise: 18px; animation: rise var(--dur-slow) var(--ease) calc(var(--i, 0) * var(--stagger)) backwards; }
+      #hero > :nth-child(2) { --i: 1; }
+      #hero > :nth-child(3) { --i: 2; }
+      #hero > :nth-child(4) { --i: 3; }
+      #hero > :nth-child(5) { --i: 4; }
+      .js-motion :where(.section-inner > h2, .doc-intro, .edu-card, .cert-card, .timeline-item, .project-card,
+        .skill-pill, .affil-list li, .doc-card, #contact-section > p, #contact-section > .btn-row):not(.is-visible) { opacity: 0; }
+      .js-motion .is-visible { animation: rise var(--dur-slow) var(--ease) calc(var(--i, 0) * var(--stagger)) backwards; }
+      .lightbox[open] { animation: pop var(--dur) var(--ease); }
+      .lightbox[open]::backdrop { animation: fade 0.45s cubic-bezier(0.25, 0.1, 0.25, 1); }
+    }
+
     /* Mobile */
     @media (max-width: 600px) {
       #hero h1 { font-size: 1.8rem; }
@@ -163,8 +266,23 @@
       .section-inner { padding: 3rem 1.25rem; }
       nav ul { gap: 0.6rem; }
       .affil-list li { flex-direction: column; align-items: flex-start; gap: 0.25rem; }
+      .timeline-item { padding-left: 1rem; padding-right: 1rem; }
+      .cert-body { padding: 1.1rem 1.25rem 1.25rem; }
+    }
+
+    /* Reduced motion: nothing moves, nothing waits to appear */
+    @media (prefers-reduced-motion: reduce) {
+      html { scroll-behavior: auto; }
+      *, *::before, *::after { animation: none !important; transition: none !important; transform: none !important; }
     }
   </style>
+  <!-- Turns on entrance motion only while JS runs; if the bottom script fails, everything shows on load -->
+  <script>
+    document.documentElement.classList.add('js-motion');
+    window.addEventListener('load', function () {
+      if (!window.motionReady) document.documentElement.classList.remove('js-motion');
+    });
+  </script>
 </head>
 <body>
 
@@ -173,6 +291,7 @@
   <span class="nav-logo">Huy Le</span>
   <ul>
     <li><a href="#education">Education</a></li>
+    <li><a href="#certifications">Certifications</a></li>
     <li><a href="#experience">Experience</a></li>
     <li><a href="#projects">Projects</a></li>
     <li><a href="#skills">Skills</a></li>
@@ -206,6 +325,129 @@
         Financial Accounting &middot; Intermediate Accounting I &amp; II &middot;
         Advanced Accounting &middot; Fundamentals of Tax-Individuals
       </p>
+    </div>
+  </div>
+</div>
+
+<!-- Certifications & Honors (image + original PDF per certificate live in /files/certs).
+     The image links to the PDF and "View" links to the image, so both work with JS off;
+     with JS on, both open the shared lightbox at the bottom of the page. -->
+<div id="certifications">
+  <div class="section-inner">
+    <h2>Certifications &amp; Honors</h2>
+    <div class="certs-grid">
+
+      <div class="cert-card">
+        <a class="cert-thumb" href="files/certs/irs-vita-advanced.pdf" target="_blank" rel="noopener" data-lightbox>
+          <img src="files/certs/irs-vita-advanced.webp" width="1600" height="1231" loading="lazy" decoding="async"
+               alt="IRS VITA/TCE Certification certificate for Huy Le, Advanced level, 2024 tax year">
+        </a>
+        <div class="cert-body">
+          <span class="tag">Tax</span>
+          <h3>VITA/TCE Certification &mdash; Advanced</h3>
+          <p class="cert-issuer">Internal Revenue Service (IRS)</p>
+          <p class="cert-date">January 2025 &middot; 2024 tax year</p>
+          <p class="cert-desc">IRS certification to prepare individual federal returns at the Advanced level through the Volunteer Income Tax Assistance program.</p>
+          <div class="doc-actions">
+            <a class="btn btn-sm" href="files/certs/irs-vita-advanced.webp" target="_blank" rel="noopener" data-lightbox aria-label="View VITA/TCE Advanced certificate">View</a>
+            <a class="btn btn-sm btn-outline" href="files/certs/irs-vita-advanced.pdf" target="_blank" rel="noopener" aria-label="PDF of VITA/TCE Advanced certificate">PDF</a>
+          </div>
+        </div>
+      </div>
+
+      <div class="cert-card">
+        <a class="cert-thumb" href="files/certs/irs-vita-standards-of-conduct.pdf" target="_blank" rel="noopener" data-lightbox>
+          <img src="files/certs/irs-vita-standards-of-conduct.webp" width="1600" height="1231" loading="lazy" decoding="async"
+               alt="IRS VITA/TCE Certification certificate for Huy Le, Volunteer Standards of Conduct, 2024 tax year">
+        </a>
+        <div class="cert-body">
+          <span class="tag">Tax</span>
+          <h3>VITA/TCE Certification &mdash; Volunteer Standards of Conduct</h3>
+          <p class="cert-issuer">Internal Revenue Service (IRS)</p>
+          <p class="cert-date">January 2025 &middot; 2024 tax year</p>
+          <p class="cert-desc">Ethics and conduct certification required of every VITA volunteer.</p>
+          <div class="doc-actions">
+            <a class="btn btn-sm" href="files/certs/irs-vita-standards-of-conduct.webp" target="_blank" rel="noopener" data-lightbox aria-label="View VITA/TCE Standards of Conduct certificate">View</a>
+            <a class="btn btn-sm btn-outline" href="files/certs/irs-vita-standards-of-conduct.pdf" target="_blank" rel="noopener" aria-label="PDF of VITA/TCE Standards of Conduct certificate">PDF</a>
+          </div>
+        </div>
+      </div>
+
+      <div class="cert-card">
+        <a class="cert-thumb" href="files/certs/beta-gamma-sigma.pdf" target="_blank" rel="noopener" data-lightbox>
+          <img src="files/certs/beta-gamma-sigma.webp" width="1600" height="1231" loading="lazy" decoding="async"
+               alt="Beta Gamma Sigma membership certificate for Huy Le, California State University, Bakersfield, April 2026">
+        </a>
+        <div class="cert-body">
+          <span class="tag">Honor Society</span>
+          <h3>Beta Gamma Sigma &mdash; Member</h3>
+          <p class="cert-issuer">Beta Gamma Sigma &middot; California State University, Bakersfield</p>
+          <p class="cert-date">Inducted April 2026</p>
+          <p class="cert-desc">Selected for membership in recognition of high scholastic achievement by the international honor society for collegiate schools of business.</p>
+          <div class="doc-actions">
+            <a class="btn btn-sm" href="files/certs/beta-gamma-sigma.webp" target="_blank" rel="noopener" data-lightbox aria-label="View Beta Gamma Sigma certificate">View</a>
+            <a class="btn btn-sm btn-outline" href="files/certs/beta-gamma-sigma.pdf" target="_blank" rel="noopener" aria-label="PDF of Beta Gamma Sigma certificate">PDF</a>
+          </div>
+        </div>
+      </div>
+
+      <div class="cert-card">
+        <a class="cert-thumb" href="files/certs/coursera-financial-statement-excel.pdf" target="_blank" rel="noopener" data-lightbox>
+          <img src="files/certs/coursera-financial-statement-excel.webp" width="1600" height="1231" loading="lazy" decoding="async"
+               alt="Coursera Project Network certificate for Huy Le, Create a Financial Statement using Microsoft Excel, December 2023">
+        </a>
+        <div class="cert-body">
+          <span class="tag">Excel</span>
+          <h3>Create a Financial Statement using Microsoft Excel</h3>
+          <p class="cert-issuer">Coursera Project Network</p>
+          <p class="cert-date">December 2023</p>
+          <p class="cert-desc">Online non-credit project certificate.</p>
+          <div class="doc-actions">
+            <a class="btn btn-sm" href="files/certs/coursera-financial-statement-excel.webp" target="_blank" rel="noopener" data-lightbox aria-label="View Coursera Excel certificate">View</a>
+            <a class="btn btn-sm btn-outline" href="files/certs/coursera-financial-statement-excel.pdf" target="_blank" rel="noopener" aria-label="PDF of Coursera Excel certificate">PDF</a>
+            <a class="btn btn-sm btn-outline" href="https://coursera.org/verify/WQ4BEK8YHU38" target="_blank" rel="noopener noreferrer" aria-label="Verify Coursera Excel certificate on coursera.org">Verify</a>
+          </div>
+        </div>
+      </div>
+
+      <div class="cert-card">
+        <a class="cert-thumb" href="files/certs/citi-human-subjects-sbe.pdf" target="_blank" rel="noopener" data-lightbox>
+          <img src="files/certs/citi-human-subjects-sbe.webp" width="1600" height="1231" loading="lazy" decoding="async"
+               alt="CITI Program completion certificate for Huy Le, Human Subjects Protection Training for PI/Researchers, Social and Behavioral Research, June 2026">
+        </a>
+        <div class="cert-body">
+          <span class="tag">Research Ethics</span>
+          <h3>Human Subjects Protection Training &mdash; PI/Researchers (Social &amp; Behavioral)</h3>
+          <p class="cert-issuer">CITI Program</p>
+          <p class="cert-date">June 2026 &middot; valid through June 2030</p>
+          <p class="cert-desc">Basic course in human-subjects research ethics, completed under CSU Bakersfield requirements.</p>
+          <div class="doc-actions">
+            <a class="btn btn-sm" href="files/certs/citi-human-subjects-sbe.webp" target="_blank" rel="noopener" data-lightbox aria-label="View CITI PI/Researchers certificate">View</a>
+            <a class="btn btn-sm btn-outline" href="files/certs/citi-human-subjects-sbe.pdf" target="_blank" rel="noopener" aria-label="PDF of CITI PI/Researchers certificate">PDF</a>
+            <a class="btn btn-sm btn-outline" href="https://www.citiprogram.org/verify/?wb9afec88-76ca-4861-a246-895018aa5d83-77815746" target="_blank" rel="noopener noreferrer" aria-label="Verify CITI PI/Researchers certificate on citiprogram.org">Verify</a>
+          </div>
+        </div>
+      </div>
+
+      <div class="cert-card">
+        <a class="cert-thumb" href="files/certs/citi-minimal-risk-research.pdf" target="_blank" rel="noopener" data-lightbox>
+          <img src="files/certs/citi-minimal-risk-research.webp" width="1600" height="1231" loading="lazy" decoding="async"
+               alt="CITI Program completion certificate for Huy Le, Human Subjects Protection Training for Students Conducting No More Than Minimal Risk Research, June 2026">
+        </a>
+        <div class="cert-body">
+          <span class="tag">Research Ethics</span>
+          <h3>Human Subjects Protection Training &mdash; Students Conducting Minimal Risk Research</h3>
+          <p class="cert-issuer">CITI Program</p>
+          <p class="cert-date">June 2026 &middot; valid through June 2030</p>
+          <p class="cert-desc">Basic course for students conducting no-more-than-minimal-risk research, completed under CSU Bakersfield requirements.</p>
+          <div class="doc-actions">
+            <a class="btn btn-sm" href="files/certs/citi-minimal-risk-research.webp" target="_blank" rel="noopener" data-lightbox aria-label="View CITI Minimal Risk Research certificate">View</a>
+            <a class="btn btn-sm btn-outline" href="files/certs/citi-minimal-risk-research.pdf" target="_blank" rel="noopener" aria-label="PDF of CITI Minimal Risk Research certificate">PDF</a>
+            <a class="btn btn-sm btn-outline" href="https://www.citiprogram.org/verify/?wcc99cbed-920f-4430-886e-2a3f07deb520-77926297" target="_blank" rel="noopener noreferrer" aria-label="Verify CITI Minimal Risk Research certificate on citiprogram.org">Verify</a>
+          </div>
+        </div>
+      </div>
+
     </div>
   </div>
 </div>
@@ -371,6 +613,7 @@
       <li><span>University Accounting Association, Member</span><span class="date">Jan 2024 &ndash; Present</span></li>
       <li><span>CalCPA, Student Member</span><span class="date">Sep 2024 &ndash; Present</span></li>
       <li><span>CalCPA Scholarship Awardee &mdash; $2,000</span><span class="date">Feb 2026</span></li>
+      <li><span>Beta Gamma Sigma International Business Honor Society, Member</span><span class="date">Apr 2026</span></li>
     </ul>
   </div>
 </div>
@@ -427,6 +670,77 @@
 <footer>
   <p>&copy; 2026 Huy Le. All rights reserved.</p>
 </footer>
+
+<!-- Certificate lightbox: one shared dialog, filled in by the script below -->
+<dialog id="cert-lightbox" class="lightbox" aria-labelledby="cert-lightbox-title">
+  <figure>
+    <button type="button" class="lightbox-close" aria-label="Close">&times;</button>
+    <img width="1600" height="1231" alt="">
+    <figcaption>
+      <span id="cert-lightbox-title" class="lightbox-title"></span>
+      <a class="btn btn-sm lightbox-pdf" href="#" target="_blank" rel="noopener">Open PDF</a>
+    </figcaption>
+  </figure>
+</dialog>
+
+<!-- Motion and lightbox. No libraries. -->
+<script>
+  (function () {
+    // Scroll reveal: each item fades up once as it enters the screen.
+    // Keep this list in sync with the ".js-motion :where(...)" rule in the <style> block.
+    var REVEAL = '.section-inner > h2, .doc-intro, .edu-card, .cert-card, .timeline-item, .project-card, ' +
+                 '.skill-pill, .affil-list li, .doc-card, #contact-section > p, #contact-section > .btn-row';
+    var items = Array.prototype.slice.call(document.querySelectorAll(REVEAL));
+    var calm = window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+    if (calm || !('IntersectionObserver' in window)) {
+      items.forEach(function (el) { el.classList.add('is-visible'); });
+    } else {
+      var io = new IntersectionObserver(function (entries) {
+        var perParent = new Map(); // items arriving together in the same grid/list are staggered
+        entries.forEach(function (entry) {
+          if (!entry.isIntersecting) return;
+          var el = entry.target, n = perParent.get(el.parentNode) || 0;
+          perParent.set(el.parentNode, n + 1);
+          el.style.setProperty('--i', Math.min(n, 8));
+          el.classList.add('is-visible');
+          io.unobserve(el);
+        });
+      }, { threshold: 0.12 });
+      items.forEach(function (el) { io.observe(el); });
+    }
+    window.motionReady = true;
+
+    // Nav turns to frosted glass once the page has scrolled.
+    var nav = document.querySelector('nav');
+    var onScroll = function () { nav.classList.toggle('is-scrolled', window.scrollY > 8); };
+    onScroll();
+    window.addEventListener('scroll', onScroll, { passive: true });
+
+    // Certificate lightbox. Without <dialog> support the links simply open the image or PDF.
+    var box = document.getElementById('cert-lightbox');
+    if (!box || typeof box.showModal !== 'function') return;
+    var boxImg = box.querySelector('img');
+    var boxTitle = document.getElementById('cert-lightbox-title');
+    var boxPdf = box.querySelector('.lightbox-pdf');
+
+    document.addEventListener('click', function (e) {
+      var link = e.target.closest && e.target.closest('[data-lightbox]');
+      if (!link || e.button !== 0 || e.ctrlKey || e.metaKey || e.shiftKey) return; // let Ctrl/Cmd-click open a tab
+      var card = link.closest('.cert-card');
+      var thumb = card.querySelector('.cert-thumb');
+      var img = thumb.querySelector('img');
+      e.preventDefault();
+      boxImg.src = img.currentSrc || img.src;
+      boxImg.alt = img.alt;
+      boxTitle.textContent = card.querySelector('h3').textContent;
+      boxPdf.href = thumb.getAttribute('href');
+      box.showModal();
+    });
+    box.querySelector('.lightbox-close').addEventListener('click', function () { box.close(); });
+    box.addEventListener('click', function (e) { if (e.target === box) box.close(); }); // backdrop click
+  })();
+</script>
 
 </body>
 </html>
